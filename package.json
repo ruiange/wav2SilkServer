@@ -1,0 +1,19 @@
+{
+  "name": "silk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.1",
+    "silk-wasm": "^3.6.1",
+    "uuid": "^10.0.0"
+  }
+}

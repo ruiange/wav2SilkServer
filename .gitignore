@@ -1,0 +1,15 @@
+node_modules/
+.idea/
+.vscode/
+
+# Ignore all files in src/assets/upload/
+src/assets/upload/*
+
+# But do not ignore .gitkeep
+!src/assets/upload/.gitkeep
+
+# Ignore all files in src/output/
+src/output/*
+
+# But do not ignore .gitkeep
+!src/upload/.gitkeep
