@@ -1,10 +1,14 @@
 import { getWavFileInfo } from 'silk-wasm'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile } from 'fs/promises'
 
 
-
-const getWavInfo = async ()=>{
-    const audio = await readFile('./src/assets/audio/xx.wav')
+/**
+ * 获取wav文件信息
+ * @param path
+ * @returns {Promise<WavFileInfo>}
+ */
+const getWavInfo = async (path='48000.wav')=>{
+    const audio = await readFile(`./src/assets/upload/${path}`)
     const info = await getWavFileInfo(audio)
     console.log(info)
     return info
