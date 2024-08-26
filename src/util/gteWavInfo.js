@@ -1,16 +1,24 @@
-import { getWavFileInfo } from 'silk-wasm'
-import { readFile } from 'fs/promises'
+import {getDuration, getWavFileInfo} from 'silk-wasm'
+import {readFile} from 'fs/promises'
 
 
 /**
  * 获取wav文件信息
- * @param path
  * @returns {Promise<WavFileInfo>}
+ * @param filePath
  */
-const getWavInfo = async (path='48000.wav')=>{
-    const audio = await readFile(`./src/assets/upload/${path}`)
-    const info = await getWavFileInfo(audio)
-    console.log(info)
-    return info
+export const getWavInfo = async (filePath)=>{
+    const audio = await readFile(filePath)
+    return getWavFileInfo(audio);
 }
-export default getWavInfo
+
+
+/**
+ * 获取音频时长
+ * @param filePath
+ * @returns {Promise<number>}
+ */
+export const obtainDuration=async (filePath)=>{
+    const audio = await readFile(filePath)
+    return getDuration(audio)
+}

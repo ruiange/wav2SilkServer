@@ -4,7 +4,10 @@ import path from "path";
 import fs from "fs";
 import {v4 as uuidv4} from 'uuid';
 import wav2silk from "../index.js";
-
+import {obtainDuration} from "../util/gteWavInfo.js";
+const millisecondsToRoundedUpSeconds = (milliseconds) =>{
+    return Math.ceil(milliseconds / 1000);
+}
 const router = express.Router();
 
 router.use(
@@ -23,8 +26,6 @@ router.post("/", async (req, res) => {
     if (!SampleRate) {
         return res.send('请填写采码率')
     }
-
-
 
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.send('请上传文件')
@@ -63,9 +64,12 @@ router.post("/", async (req, res) => {
         };
 
         const filePath = await wav2silk(file.path, SampleRate)
-
-
-        res.send(`${protocol}://${host}/output/${filePath}`)
+        const duration = await obtainDuration(`./src/output/${filePath}`)
+        const obj={
+            url:`${protocol}://${host}/output/${filePath}`,
+            duration:millisecondsToRoundedUpSeconds(duration)
+        }
+        res.send(obj)
     });
 
 

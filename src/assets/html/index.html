@@ -141,8 +141,8 @@
                 })
                     .then(response => response.text()) // 根据你的API响应类型，这里可能需要调整
                     .then(data => {
-                        console.log('文件上传成功，响应URL:', data);
-                        this.downloadUrl = data
+                        console.log('文件上传成功，响应URL:', data.url);
+                        this.downloadUrl = data.url
                         // 这里可以添加更多的逻辑来处理响应，例如重定向到返回的URL
                         this.dialogVisible = true
                         this.reset()
