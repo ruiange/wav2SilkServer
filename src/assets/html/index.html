@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Element UI 文件上传示例</title>
+    <title>wav转silk</title>
     <!-- 引入 Element UI 的 CSS 文件 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
@@ -46,7 +46,8 @@
         right: 30px;
         bottom: 30px;
     }
-    .logo{
+
+    .logo {
         width: 100px;
         cursor: pointer;
     }
@@ -54,19 +55,20 @@
 <body>
 <div id="app">
     <div class="box">
-        <div class="title">wav转silk(未完成  页面开发中)</div>
-        <el-form label-width="100px">
+        <div class="title">wav转silk(未完成 页面开发中)</div>
+        <el-form label-width="100px" v-loading="loading">
             <el-form-item label="上传文件">
                 <el-upload
                         class="upload-demo"
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        action="random"
                         :on-success="handleSuccess"
                         :before-upload="beforeUpload"
                         :limit="1"
+                        :http-request="upFun"
                         :file-list="uploadedFiles"
-                        accept=".xlsx,.xls"
+                        accept=".wav"
                         multiple>
-                    <el-button  type="primary">点击上传</el-button>
+                    <el-button type="primary">点击上传</el-button>
                     <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过20MB</div>
                 </el-upload>
             </el-form-item>
@@ -74,16 +76,24 @@
                 <el-input v-model="samplingRate" style="max-width: 300px;"/>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">确定</el-button>
-                <el-button>重置</el-button>
+                <el-button type="primary" @click="submit">确定</el-button>
+                <el-button @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
-
-
         <div class="footer-box">
             <img src="/assets/html/logo.svg" class="logo" alt="logo" @click="openGitee"/>
         </div>
     </div>
+
+    <el-dialog
+            title="点击下载"
+            :visible.sync="dialogVisible"
+            width="300px">
+        <a :href="downloadUrl">{{downloadUrl}}</a>
+        <el-button @click="downloadFile" type="primary" style="margin-top: 20px;">下载文件</el-button>
+
+        </span>
+    </el-dialog>
 </div>
 
 <!-- 引入 Vue.js -->
@@ -96,10 +106,61 @@
         el: '#app',
         data: {
             uploadedFiles: [],
-            samplingRate: null
+            samplingRate: null,
+            formData: null,
+            dialogVisible: false,
+            downloadUrl: null,
+            loading: false,
         },
         methods: {
-            openGitee(){
+            reset() {
+                this.uploadedFiles = []
+                this.samplingRate = null;
+                this.formData = null
+            },
+            downloadFile() {
+                const url = this.downloadUrl;
+                const link = document.createElement('a');
+                link.href = url;
+                let currentTime = new Date().getTime();
+                link.download = `${currentTime}.silk`; // 指定下载的文件名
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            submit() {
+                if (!this.samplingRate) {
+                    this.$message.error('请输入采码率');
+                    return;
+                }
+                this.formData.append('SampleRate', this.samplingRate);
+                this.loading = true
+                fetch('/', {
+                    method: 'POST',
+                    body: this.formData,
+                })
+                    .then(response => response.text()) // 根据你的API响应类型，这里可能需要调整
+                    .then(data => {
+                        console.log('文件上传成功，响应URL:', data);
+                        this.downloadUrl = data
+                        // 这里可以添加更多的逻辑来处理响应，例如重定向到返回的URL
+                        this.dialogVisible = true
+                        this.reset()
+                        this.loading = false
+                    })
+                    .catch(error => {
+                        console.error('文件上传失败:', error);
+                        this.reset()
+                        this.loading = false
+                    });
+            },
+            upFun(file) {
+
+                this.formData = new FormData();
+                this.formData.append('file', file.file);
+
+            },
+            openGitee() {
                 window.open('https://gitee.com/ruiange/wav2silk');
             },
             beforeUpload(file) {
@@ -114,9 +175,10 @@
             },
             checkFile(file) {
                 // 这里可以添加文件类型检查逻辑，例如只允许上传图片
-                const isLegal = file.type.startsWith('image/');
+                const isLegal = file.type.startsWith('audio/wav');
                 if (!isLegal) {
-                    // 可以在这里弹出提示信息
+                    //this.$message.error('上传文件格式不正确!');
+                    return false
                 }
                 return isLegal;
             }

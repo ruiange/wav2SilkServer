@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
 
     //获取上传文件类型
-    if(uploadedFile.mimetype !== 'audio/wave'){
+    if(!(uploadedFile.mimetype === 'audio/wave'|| uploadedFile.mimetype === 'audio/wav')){
         return res.send(`请上传wav文件,不支持${uploadedFile.mimetype}类型`)
     }
 
