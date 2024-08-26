@@ -13,7 +13,7 @@ app.use(router)
 
 // 配置静态文件服务，将'src/output'目录下的文件暴露为/static访问路径
 app.use('/output', express.static(path.join(process.cwd(), 'src/output')))
-
+app.use('/assets', express.static(path.join(process.cwd(), 'src/assets')))
 // 启动服务器，监听3000端口
 app.listen(3000, () => {
   console.log('http://localhost:3000')

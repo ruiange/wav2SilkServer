@@ -1,10 +1,12 @@
 import express from "express";
-const router = express.Router();
 import fileUpload from 'express-fileupload';
 import path from "path";
 import fs from "fs";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 import wav2silk from "../index.js";
+
+const router = express.Router();
+
 router.use(
     fileUpload({
         createParentPath: true,
@@ -15,6 +17,13 @@ router.post("/", async (req, res) => {
     const host = req.headers.host;
     //获取请求协议
     const protocol = req.protocol;
+
+    const SampleRate = req.body.SampleRate
+
+    if (!SampleRate) {
+        return res.send('请填写采码率')
+    }
+
 
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.send('请上传文件')
@@ -28,7 +37,6 @@ router.post("/", async (req, res) => {
     if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
     }
-
 
 
     // 使用 UUID 生成唯一的文件名，保留文件扩展名
@@ -48,7 +56,7 @@ router.post("/", async (req, res) => {
             path: uniqueFileName,
         };
 
-      const filePath =   await wav2silk(file.path)
+        const filePath = await wav2silk(file.path, SampleRate)
 
 
         res.send(`${protocol}://${host}/output/${filePath}`)
@@ -56,4 +64,10 @@ router.post("/", async (req, res) => {
 
 
 });
+
+
+router.get('/', (req, res) => {
+    //返回一个html页面
+    res.sendFile(path.join(process.cwd(), 'src/assets/html/index.html'))
+})
 export default router;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Element UI 文件上传示例</title>
+    <!-- 引入 Element UI 的 CSS 文件 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+</head>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #F1F5F9;
+    }
+
+    #app {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .box {
+        width: 80%;
+        height: 500px;
+        border-radius: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        padding: 30px;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .footer-box {
+        position: absolute;
+        right: 30px;
+        bottom: 30px;
+    }
+    .logo{
+        width: 100px;
+        cursor: pointer;
+    }
+</style>
+<body>
+<div id="app">
+    <div class="box">
+        <div class="title">wav转silk</div>
+        <el-form label-width="100px">
+            <el-form-item label="上传文件">
+                <el-upload
+                        class="upload-demo"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :on-success="handleSuccess"
+                        :before-upload="beforeUpload"
+                        :limit="1"
+                        :file-list="uploadedFiles"
+                        accept=".xlsx,.xls"
+                        multiple>
+                    <el-button  type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过20MB</div>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="采码率：">
+                <el-input v-model="samplingRate" style="max-width: 300px;"/>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary">确定</el-button>
+                <el-button>重置</el-button>
+            </el-form-item>
+        </el-form>
+
+
+        <div class="footer-box">
+            <img src="/assets/html/logo.svg" class="logo" alt="logo" @click="openGitee"/>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Vue.js -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<!-- 引入 Element UI 的 JavaScript 文件 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    // 创建 Vue 实例
+    new Vue({
+        el: '#app',
+        data: {
+            uploadedFiles: [],
+            samplingRate: null
+        },
+        methods: {
+            openGitee(){
+                window.open('https://gitee.com/ruiange/wav2silk');
+            },
+            beforeUpload(file) {
+                const isLegal = this.checkFile(file);
+                if (!isLegal) {
+                    this.$message.error('上传文件格式不正确!');
+                }
+                return isLegal;
+            },
+            handleSuccess(response, file, fileList) {
+                this.uploadedFiles.push(file.name);
+            },
+            checkFile(file) {
+                // 这里可以添加文件类型检查逻辑，例如只允许上传图片
+                const isLegal = file.type.startsWith('image/');
+                if (!isLegal) {
+                    // 可以在这里弹出提示信息
+                }
+                return isLegal;
+            }
+        }
+    });
+</script>
+</body>
+</html>
