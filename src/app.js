@@ -15,7 +15,7 @@ app.use(router)
 app.use('/output', express.static(path.join(process.cwd(), 'src/output')))
 app.use('/assets', express.static(path.join(process.cwd(), 'src/assets')))
 // 启动服务器，监听3000端口
-const port =  3000
+const port =  3010
 app.listen(port, () => {
   console.log(`接口地址 POST http://localhost:${port}`)
 })

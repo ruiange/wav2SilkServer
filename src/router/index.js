@@ -32,6 +32,11 @@ router.post("/", async (req, res) => {
     let uploadedFile = req.files.file;
 
 
+    //获取上传文件类型
+    if(uploadedFile.mimetype !== 'audio/wave'){
+        return res.send(`请上传wav文件,不支持${uploadedFile.mimetype}类型`)
+    }
+
     // 确保 uploads 目录存在
     const uploadDir = path.join(process.cwd(), 'src/assets/upload');
     if (!fs.existsSync(uploadDir)) {
