@@ -56,7 +56,7 @@
 <div id="app">
     <div class="box">
         <div class="title">wav转silk</div>
-        <el-form label-width="100px" v-loading="loading">
+        <el-form label-width="90px" v-loading="loading">
             <el-form-item label="上传文件">
                 <el-upload
                         class="upload-demo"
@@ -69,7 +69,7 @@
                         accept=".wav"
                         multiple>
                     <el-button type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传wav文件，且不超过20MB</div>
+                    <div slot="tip" class="el-upload__tip">上传wav文件，且不超过20MB</div>
                 </el-upload>
             </el-form-item>
             <el-form-item label="采码率：">
