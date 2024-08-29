@@ -88,8 +88,9 @@
     <el-dialog
             title="点击下载"
             :visible.sync="dialogVisible"
-            width="300px">
+            width="400px">
         <a :href="downloadUrl">{{downloadUrl}}</a>
+        <div style="margin-top: 10px;">时长：{{duration}}</div>
         <el-button @click="downloadFile" type="primary" style="margin-top: 20px;">下载文件</el-button>
 
         </span>
@@ -111,6 +112,7 @@
             dialogVisible: false,
             downloadUrl: null,
             loading: false,
+            duration:0
         },
         methods: {
             reset() {
@@ -141,8 +143,10 @@
                 })
                     .then(response => response.text()) // 根据你的API响应类型，这里可能需要调整
                     .then(data => {
-                        console.log('文件上传成功，响应URL:', data.url);
-                        this.downloadUrl = data.url
+                        const newData = JSON.parse(data);
+                        console.log('文件上传成功，响应URL:', newData.url);
+                        this.downloadUrl = newData.url
+                        this.duration = newData.duration
                         // 这里可以添加更多的逻辑来处理响应，例如重定向到返回的URL
                         this.dialogVisible = true
                         this.reset()
