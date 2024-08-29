@@ -12,4 +12,4 @@ src/assets/upload/*
 src/output/*
 
 # But do not ignore .gitkeep
-!src/upload/.gitkeep
+!src/output/.gitkeep
