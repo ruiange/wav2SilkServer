@@ -27,6 +27,11 @@ pnpm install
 ```npm
 npm run serve
 ```
+- 指定端口启动
+```npm
+$env:PORT = 4000; npm run serve
+```
+
 ## 访问
 ```url
 http://localhost:3010 

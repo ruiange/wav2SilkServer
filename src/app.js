@@ -15,7 +15,7 @@ app.use('/output', express.static(path.join(process.cwd(), 'src/output')))
 app.use('/assets', express.static(path.join(process.cwd(), 'src/assets')))
 
 
-const port =  3010
-app.listen(port, () => {
-  console.log(`接口地址 POST http://localhost:${port}`)
+const PORT = process.env.PORT || 3010; // 使用环境变量或默认端口3000
+app.listen(PORT, () => {
+  console.log(`接口地址 POST http://localhost:${PORT}`)
 })
